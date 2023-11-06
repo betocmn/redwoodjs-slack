@@ -14,7 +14,6 @@ const receiver = new ExpressReceiver({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
-  processBeforeResponse: true,
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
   installationStore: {
     storeInstallation: async (installation) => {
@@ -54,9 +53,13 @@ const receiver = new ExpressReceiver({
       throw new Error('Failed to delete installation');
     },
   },
+  installerOptions: {
+
+  }
 });
 
 const app = new App({
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
   receiver,
   logLevel: LogLevel.DEBUG
 });
