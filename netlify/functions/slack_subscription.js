@@ -1,19 +1,18 @@
 const { App, ExpressReceiver, FileInstallationStore, LogLevel } = require('@slack/bolt');
 
-
-const app = new App({signingSecret: process.env.SLACK_SIGNING_SECRET,
+const receiver = new ExpressReceiver({
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
   stateSecret: 'my-secret',
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
   installationStore: new FileInstallationStore(),
-  logLevel: LogLevel.DEBUG
 });
 
-// receiver.router.post('/slack/events', (req, res) => {
-//   res.send('ok')
-// });
+const app = new App({
+  receiver,
+  logLevel: LogLevel.DEBUG
+});
 
 app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
   try {
@@ -65,11 +64,12 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 });
 
 module.exports = {
-  handler: async (event, context, callback) => {
-    const _handler = await app.start();
-    return _handler(event, context, callback);
+  handler: async (req, context) => {
+    app.start()
+    console.log('req', context);
+    console.log('context', context);
   },
   config: {
     path: '/slack/events'
   }
-}
+};
