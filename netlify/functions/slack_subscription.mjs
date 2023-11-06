@@ -1,5 +1,5 @@
 const { App, ExpressReceiver, FileInstallationStore, LogLevel } = require('@slack/bolt');
-import { Redis } from "@upstash/redis";
+const { Redis } = require("@upstash/redis");
 
 const {
   parseRequestBody,
