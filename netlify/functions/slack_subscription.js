@@ -67,7 +67,7 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 module.exports = {
   handler: async (req, context) => {
     console.log('req', context);
-    console.log('context', context);
+    return Response('test ok', { status: 200 })
   },
   config: {
     path: '/slack/events'
