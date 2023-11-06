@@ -1,5 +1,4 @@
 const { App, ExpressReceiver, FileInstallationStore, LogLevel } = require('@slack/bolt');
-const serverless = require('serverless-http');
 
 const receiver = new ExpressReceiver({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
@@ -15,9 +14,9 @@ const app = new App({
   logLevel: LogLevel.DEBUG
 });
 
-receiver.router.post('/slack/events', (req, res) => {
-  res.send('ok')
-});
+// receiver.router.post('/slack/events', (req, res) => {
+//   res.send('ok')
+// });
 
 app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
   try {
@@ -68,10 +67,12 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
   logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
 });
 
-const handler = serverless(receiver);
-module.exports.handler = async (event, context) => {
-  // you can do other things here
-  const result = await handler(event, context);
-  // and here
-  return result;
-};
+module.exports = {
+  handler: async (event, context, callback) => {
+    const handler = await receiver.start();
+    return handler(event, context, callback);
+  },
+  config: {
+    path: '/slack/events'
+  }
+}
