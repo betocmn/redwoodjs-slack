@@ -4,6 +4,7 @@ const receiver = new ExpressReceiver({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
+  processBeforeResponse: true,
   stateSecret: 'my-secret',
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
   installationStore: new FileInstallationStore(),
@@ -65,7 +66,6 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 
 module.exports = {
   handler: async (req, context) => {
-    app.start()
     console.log('req', context);
     console.log('context', context);
   },
