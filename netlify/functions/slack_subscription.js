@@ -69,8 +69,8 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 
 module.exports = {
   handler: async (event, context, callback) => {
-    const handler = await receiver.start();
-    return handler(event, context, callback);
+    const _handler = await receiver.start();
+    return _handler(event, context, callback);
   },
   config: {
     path: '/slack/events'
