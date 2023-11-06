@@ -11,9 +11,9 @@ const {
 const redis = Redis.fromEnv();
 
 const receiver = new ExpressReceiver({
-  signingSecret: `${process.env.SLACK_SIGNING_SECRET}`,
-  clientId: `${process.env.SLACK_CLIENT_ID}`,
-  clientSecret: `${process.env.SLACK_CLIENT_SECRET}`,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
   installationStore: {
     storeInstallation: async (installation) => {
@@ -111,6 +111,17 @@ app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
 app.view('log_decision', async ({ body, ack, say, logger }) => {
   await ack();
   logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
+});
+
+app.message('hi', async ({ message, say, logger }) => {
+  logger.info('message received: ', message.text)
+  // say() sends a message to the channel where the event was triggered
+  try {
+    await say(`Hey there <@${message.user}>!`);
+
+  } catch (error) {
+    logger.error(error)
+  }
 });
 
 module.exports = {
