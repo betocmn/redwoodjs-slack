@@ -9,13 +9,11 @@ const {
 
 
 const redis = Redis.fromEnv();
-console.log('  signingSecret: process.env.SLACK_SIGNING_SECRET,', process.env.SLACK_SIGNING_SECRET,);
-console.log('  clientId: process.env.SLACK_CLIENT_ID,', process.env.SLACK_CLIENT_ID,);
-console.log('  clientSecret: process.env.SLACK_CLIENT_SECRET,', process.env.SLACK_CLIENT_SECRET,);
+
 const receiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  clientId: process.env.SLACK_CLIENT_ID,
-  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  signingSecret: `${process.env.SLACK_SIGNING_SECRET}`,
+  clientId: `${process.env.SLACK_CLIENT_ID}`,
+  clientSecret: `${process.env.SLACK_CLIENT_SECRET}`,
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
   installationStore: {
     storeInstallation: async (installation) => {
