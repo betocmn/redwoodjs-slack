@@ -5,7 +5,7 @@ const {
   parseRequestBody,
   generateReceiverEvent,
   isUrlVerificationRequest
-} = require("./utils");
+} = require("../utils");
 
 
 const redis = Redis.fromEnv();
