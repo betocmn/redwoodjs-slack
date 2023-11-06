@@ -1,4 +1,9 @@
 const { App, ExpressReceiver, FileInstallationStore, LogLevel } = require('@slack/bolt');
+const {
+  parseRequestBody,
+  generateReceiverEvent,
+  isUrlVerificationRequest
+} = require("../utils");
 
 const receiver = new ExpressReceiver({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
@@ -65,10 +70,22 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 });
 
 module.exports = {
-  handler: async (req, context) => {
-    receiver.requestHandler(req)
-  },
-  config: {
-    path: '/slack/events'
+  handler: async (event, context) => {
+    const payload = parseRequestBody(event.body, event.headers["content-type"]);
+
+    if (isUrlVerificationRequest(payload)) {
+      return {
+        statusCode: 200,
+        body: payload?.challenge
+      };
+    }
+
+    const slackEvent = generateReceiverEvent(payload);
+    await app.processEvent(slackEvent);
+
+    return {
+      statusCode: 200,
+      body: ""
+    };
   }
 };
