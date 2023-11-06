@@ -23,6 +23,7 @@
   "packageManager": "yarn@3.6.3",
   "dependencies": {
     "@slack/bolt": "^3.14.0",
+    "@upstash/redis": "^1.24.3",
     "serverless-http": "^3.2.0"
   }
 }

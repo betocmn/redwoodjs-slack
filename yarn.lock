@@ -5903,6 +5903,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@upstash/redis@npm:^1.24.3":
+  version: 1.24.3
+  resolution: "@upstash/redis@npm:1.24.3"
+  dependencies:
+    crypto-js: ^4.2.0
+  checksum: f689d1c2d143ea5f12a96a4c723670d73e8415f755e9bd3e7eba0157a91c31aac55de65a4ace74d0aabcf1f96b30bd8bb4c1c0ae7771ff3d0f08a9d4c4eaeb74
+  languageName: node
+  linkType: hard
+
 "@vitejs/plugin-react@npm:4.0.4":
   version: 4.0.4
   resolution: "@vitejs/plugin-react@npm:4.0.4"
@@ -9045,6 +9054,13 @@ __metadata:
   version: 4.1.1
   resolution: "crypto-js@npm:4.1.1"
   checksum: 50cc66a35f2738171d9a6d80c85ba7d00cb6440b756db035ba9ccd03032c0a803029a62969ecd4c844106c980af87687c64b204dd967989379c4f354fb482d37
+  languageName: node
+  linkType: hard
+
+"crypto-js@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "crypto-js@npm:4.2.0"
+  checksum: 8fbdf9d56f47aea0794ab87b0eb9833baf80b01a7c5c1b0edc7faf25f662fb69ab18dc2199e2afcac54670ff0cd9607a9045a3f7a80336cccd18d77a55b9fdf0
   languageName: node
   linkType: hard
 
@@ -18088,6 +18104,7 @@ __metadata:
   dependencies:
     "@redwoodjs/core": 6.3.2
     "@slack/bolt": ^3.14.0
+    "@upstash/redis": ^1.24.3
     serverless-http: ^3.2.0
   languageName: unknown
   linkType: soft
