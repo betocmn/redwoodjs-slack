@@ -164,23 +164,23 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 
 module.exports.handler = async (req, context) => {
-    const payload = parseRequestBody(req.body, req.headers["content-type"]);
+  //   const payload = parseRequestBody(req.body, req.headers["content-type"]);
 
-  const ack = new HTTPResponseAck({
-    logger: new ConsoleLogger(),
-    processBeforeResponse: false,
-    unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
-    unhandledRequestTimeoutMillis: 3001,
-    httpRequest: payload,
-    httpResponse: new ServerResponse(payload),
-  });
-  const event = {
-    body: payload,
-    ack: ack.bind()
-  }
+  // const ack = new HTTPResponseAck({
+  //   logger: new ConsoleLogger(),
+  //   processBeforeResponse: false,
+  //   unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
+  //   unhandledRequestTimeoutMillis: 3001,
+  //   httpRequest: payload,
+  //   httpResponse: new ServerResponse(payload),
+  // });
+  // const event = {
+  //   body: payload,
+  //   ack: ack.bind()
+  // }
 
 
-   await app.processEvent(event)
+  //  await app.processEvent(event)
    return new Response("ok");
 
 }
