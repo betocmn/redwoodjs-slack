@@ -1,5 +1,6 @@
 const { App, ExpressReceiver, LogLevel } = require('@slack/bolt');
 const { Redis } = require("@upstash/redis");
+const serverless = require('serverless-http');
 
 const {
   parseRequestBody,
@@ -151,16 +152,16 @@ app.message('hi', async ({ message, say, logger }) => {
   }
 });
 
+
+const handler = serverless(receiver.app);
 module.exports.handler = async (req, context) => {
+  return handler(req, context)
+  // const payload = parseRequestBody(req.body, req.headers["content-type"]);
+  // console.log('payload :', payload);
+  // if (isUrlVerificationRequest(payload)) {
+  //   return new Response(payload.challenge);
+  // }
 
-  const payload = parseRequestBody(req.body, req.headers["content-type"]);
-  console.log('payload :', payload);
-  if (isUrlVerificationRequest(payload)) {
-    return new Response(payload.challenge);
-  }
-
-  await app.start();
-
-  return new Response("ok");
+  // return new Response("ok");
 
 };
