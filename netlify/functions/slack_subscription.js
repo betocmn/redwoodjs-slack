@@ -156,7 +156,6 @@ app.message('hi', async ({ message, say, logger }) => {
 
 module.exports.handler = async (req, context) => {
 
-  await app.start()
   return await receiver.requestHandler(req, 'ok')
 }
 // module.exports.handler = async (req, context) => {
