@@ -1,13 +1,13 @@
-import * as Bolt from '@slack/bolt';
-import { Redis } from "@upstash/redis";
+const { App, ExpressReceiver, LogLevel } = require('@slack/bolt');
+const { Redis } = require("@upstash/redis");
 
-import {
+const {
   parseRequestBody,
   generateReceiverEvent,
   isUrlVerificationRequest
-} from "../utils";
+} = require("../utils");
 
-export default async (req, context) => {
+module.exports.handler = async (req, context) => {
 
   const redis = Redis.fromEnv();
   const installationStore = {
@@ -48,7 +48,7 @@ export default async (req, context) => {
       throw new Error('Failed to delete installation');
     },
   }
-  const receiver = new Bolt.ExpressReceiver({
+  const receiver = new ExpressReceiver({
     signingSecret: Netlify.env.get('SLACK_SIGNING_SECRET'),
     clientId: Netlify.env.get('SLACK_CLIENT_ID'),
     clientSecret: Netlify.env.get('SLACK_CLIENT_SECRET'),
@@ -57,9 +57,9 @@ export default async (req, context) => {
     installationStore
   })
 
-  const app = new Bolt.App({
+  const app = new App({
     receiver,
-    logLevel: Bolt.LogLevel.DEBUG
+    logLevel: LogLevel.DEBUG
   });
 
   const logDesicionView = {
