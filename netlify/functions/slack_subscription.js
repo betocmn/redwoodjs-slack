@@ -163,7 +163,6 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 
 module.exports.handler = async (event, context) => {
   // you can do other things here
-  await app.stop()
 
   const server = await app.start()
   const handler = serverless(server);
