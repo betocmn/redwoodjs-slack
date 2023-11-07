@@ -7,6 +7,7 @@ const {
   isUrlVerificationRequest
 } = require("../utils");
 
+
 module.exports.handler = async (req, context) => {
 
   const redis = Redis.fromEnv();
@@ -48,10 +49,27 @@ module.exports.handler = async (req, context) => {
       throw new Error('Failed to delete installation');
     },
   }
+  const authorizeFn = async ({ teamId, enterpriseId }) => {
 
-console.log('signingSecret: ',process.env.SLACK_SIGNING_SECRET);
-console.log('clientId: ',process.env.SLACK_CLIENT_ID);
-console.log('clientSecret: ',process.env.SLACK_CLIENT_SECRET);
+    if (enterpriseId) {
+      const installation = redis.get(enterpriseId)
+      return {
+        botToken: installation.access_token,
+        botUserId: installation.bot_user_id
+      };
+    }
+    if (teamId) {
+      const installation = redis.get(teamId)
+      return {
+        botToken: installation.access_token,
+        botUserId: installation.bot_user_id
+      };
+    }
+    throw new Error('No matching authorizations');
+
+
+  }
+
   const receiver = new ExpressReceiver({
     signingSecret: process.env.SLACK_SIGNING_SECRET,
     clientId: process.env.SLACK_CLIENT_ID,
@@ -63,6 +81,7 @@ console.log('clientSecret: ',process.env.SLACK_CLIENT_SECRET);
 
   const app = new App({
     signingSecret: process.env.SLACK_SIGNING_SECRET,
+    authorize: authorizeFn,
     receiver,
     logLevel: LogLevel.DEBUG
   });
