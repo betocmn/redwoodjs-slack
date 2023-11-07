@@ -153,6 +153,16 @@ const app = new App({
 //     logger.error(error)
 //   }
 // });
+app.message('hi', async ({ message, say, logger }) => {
+  logger.info('message received: ', message.text)
+  try {
+    say('¡Hola!')
+
+  } catch (error) {
+    logger.error(error)
+  }
+});
+
 module.exports.handler = async (req, context) => {
     const payload = parseRequestBody(req.body, req.headers["content-type"]);
 
@@ -169,15 +179,7 @@ module.exports.handler = async (req, context) => {
     ack: ack.bind()
   }
 
-  app.message('hi', async ({ message, say, logger }) => {
-    logger.info('message received: ', message.text)
-    try {
-      say('¡Hola!')
 
-    } catch (error) {
-      logger.error(error)
-    }
-  });
    await app.processEvent(event)
    return new Response("ok");
 
