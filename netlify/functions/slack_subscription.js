@@ -204,21 +204,7 @@ module.exports.handler = async (req, context) => {
   if (req.body && req.body.type && req.body.type === 'url_verification') {
     return Response.json({ challenge: req.body.challenge });
   }
-
-  const ack = new HTTPResponseAck({
-    logger: new ConsoleLogger(),
-    processBeforeResponse: false,
-    unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
-    unhandledRequestTimeoutMillis: 3001,
-    httpRequest: req,
-    httpResponse: new ServerResponse(req),
-  });
-  const event = {
-    body: req.body,
-    ack: ack.bind()
-  }
-
-  await app.processEvent(event)
+  await receiver.requestHandler(req, new ServerResponse(req))
   return new Response("ok")
 
 }
