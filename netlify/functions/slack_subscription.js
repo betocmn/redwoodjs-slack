@@ -179,7 +179,7 @@ module.exports.handler = async (req, context) => {
   //   ack: ack.bind()
   // }
 
-
+  await receiver.start()
   //  await app.processEvent(event)
    return new Response("ok");
 
