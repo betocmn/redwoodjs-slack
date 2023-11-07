@@ -156,7 +156,7 @@ module.exports.handler = async (req, context) => {
   });
 
   await app.start()
-  return Response('ok')
+  return new Response('ok')
 }
 // module.exports.handler = async (req, context) => {
 //   const payload = parseRequestBody(req.body, req.headers["content-type"]);
