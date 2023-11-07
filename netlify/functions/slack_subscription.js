@@ -171,17 +171,16 @@ module.exports.handler = serverless(receiver.app, {
       } catch (error) {
         if (error) {
           console.log('Parsing request body failed', error);
-          context.res = new Response('', { status: 401 });
         }
       }
-      if (req.body && req.body.ssl_check) {
-        context.res = new Response();
-      }
+    //   if (req.body && req.body.ssl_check) {
+    //     context.res = new Response();
+    //   }
 
-      if (req.body && req.body.type && req.body.type === 'url_verification') {
-        context.res = Response.json({ challenge: req.body.challenge });
-      }
-    context.res = await receiver.requestHandler(req, new ServerResponse(req))
+    //   if (req.body && req.body.type && req.body.type === 'url_verification') {
+    //     context.res = Response.json({ challenge: req.body.challenge });
+    //   }
+    // context.res = await receiver.requestHandler(req, new ServerResponse(req))
   }
 })
 // module.exports.handler = async (req, context) => {
