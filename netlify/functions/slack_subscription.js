@@ -153,8 +153,11 @@ app.message('hi', async ({ message, say, logger }) => {
   }
 });
 
-module.exports.handler = serverless(app.receiver.start(), {
+module.exports.handler = serverless(app.receiver.app, {
   async request(req, context) {
+    console.log('req: ', req);
+    console.log('context: ', context);
+
     // const payload = parseRequestBody(req.body, req.headers["content-type"]);
     // const slackEvent = generateReceiverEvent(payload);
     // await app.processEvent(slackEvent);
