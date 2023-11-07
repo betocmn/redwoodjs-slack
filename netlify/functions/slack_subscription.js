@@ -153,10 +153,35 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 // });
 
 module.exports.handler = serverless(receiver.app, {
-  request(req) {
+  async request(req, context) {
+    context.res =
     console.log('req.body: ', req.body);
     console.log('req.headers: ', req.headers);
+      let stringBody
+      const preparsedRawBody = req.body;
+      if (preparsedRawBody !== undefined) {
+        stringBody = preparsedRawBody.toString();
+      } else {
+        stringBody = (await rawBody(req)).toString();
+      }
 
+      try {
+        const { 'content-type': contentType } = req.headers;
+        req.body = parseRequestBody(stringBody, contentType);
+      } catch (error) {
+        if (error) {
+          console.log('Parsing request body failed', error);
+          context.res = new Response('', { status: 401 });
+        }
+      }
+      if (req.body && req.body.ssl_check) {
+        context.res = new Response();
+      }
+
+      if (req.body && req.body.type && req.body.type === 'url_verification') {
+        context.res = Response.json({ challenge: req.body.challenge });
+      }
+    context.res = await receiver.requestHandler(req, new ServerResponse(req))
   }
 })
 // module.exports.handler = async (req, context) => {
