@@ -153,10 +153,9 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 
 
-const handler = serverless(receiver.app);
 
 module.exports.handler = async (req, context) => {
-  return await handler(context, req);
+  return await receiver.requestHandler(req, 'ok')
 }
 // module.exports.handler = async (req, context) => {
 //   const payload = parseRequestBody(req.body, req.headers["content-type"]);
