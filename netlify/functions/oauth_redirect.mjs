@@ -21,7 +21,7 @@ export default async (req, context) => {
   const slackOAuthURL = 'https://slack.com/api/oauth.v2.access';
 
   const formData = new URLSearchParams();
-  formData.append('code', code);
+  formData.append('code', code.split('.')[3]);
   formData.append('client_id', clientId);
   formData.append('client_secret', clientSecret);
 
