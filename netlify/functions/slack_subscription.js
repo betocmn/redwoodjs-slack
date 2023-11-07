@@ -153,19 +153,7 @@ app.message('hi', async ({ message, say, logger }) => {
   }
 });
 
-module.exports.handler = serverless(app.receiver.app, {
-  async request(req, context) {
-    console.log('req: ', req);
-    console.log('context: ', context);
-
-    // const payload = parseRequestBody(req.body, req.headers["content-type"]);
-    // const slackEvent = generateReceiverEvent(payload);
-    // await app.processEvent(slackEvent);
-  },
-  async response() {
-    return new Response("ok");
-  }
-})
+module.exports.handler = receiver.requestHandler
 // const handler = serverless(receiver.app, { provider: 'aws'});
 
 // module.exports.handler = async (req, context) => {
