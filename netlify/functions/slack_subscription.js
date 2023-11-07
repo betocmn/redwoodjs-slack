@@ -52,7 +52,7 @@ module.exports.handler = async (req, context) => {
   const authorizeFn = async ({ teamId, enterpriseId }) => {
     console.log('fron autizeFn', teamId);
     if (enterpriseId) {
-      const installation = redis.get(enterpriseId)
+      const installation = await redis.get(enterpriseId)
       return {
         botToken: installation.access_token,
         botUserId: installation.bot_user_id,
@@ -62,7 +62,7 @@ module.exports.handler = async (req, context) => {
       };
     }
     if (teamId) {
-      const installation = redis.get(teamId)
+      const installation = await redis.get(teamId)
       console.log('installation', installation);
       return {
         botToken: installation.access_token,
