@@ -107,8 +107,7 @@ const receiver = new ExpressReceiver({
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateVerification: false,
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
-  installationStore,
-  processBeforeResponse: true
+  installationStore
 })
 
 const app = new App({
@@ -187,7 +186,7 @@ module.exports.handler = async (req, context) => {
   } catch (error) {
     console.log('error asd: ', error);
   }
-  
+
   try {
     const { 'content-type': contentType } = req.headers;
     req.body = parseRequestBody(stringBody, contentType);
