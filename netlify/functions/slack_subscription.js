@@ -160,7 +160,7 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 //     logger.error(error)
 //   }
 // });
-  module.exports.handler = serverless(receiver.app);
+  module.exports.handler = serverless(receiver.start());
 // module.exports.handler = async (req, context) => {
 //   let stringBody
 //   const preparsedRawBody = req.body;
