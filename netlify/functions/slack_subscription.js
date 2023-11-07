@@ -54,8 +54,11 @@ module.exports.handler = async (req, context) => {
     if (enterpriseId) {
       const installation = redis.get(enterpriseId)
       return {
-        userToken: installation.access_token,
-        botUserId: installation.bot_user_id
+        botToken: installation.access_token,
+        botUserId: installation.bot_user_id,
+        userId: installation.authed_user.id,
+        teamId: installation.team?.id,
+        enterpriseId: installation.enterprise?.id,
       };
     }
     if (teamId) {
@@ -63,7 +66,10 @@ module.exports.handler = async (req, context) => {
       console.log('installation', installation);
       return {
         botToken: installation.access_token,
-        botUserId: installation.bot_user_id
+        botUserId: installation.bot_user_id,
+        userId: installation.authed_user.id,
+        teamId: installation.team?.id,
+        enterpriseId: installation.enterprise?.id,
       };
     }
     throw new Error('No matching authorizations');
@@ -88,7 +94,6 @@ module.exports.handler = async (req, context) => {
     receiver,
     logLevel: LogLevel.DEBUG
   });
-
   const logDesicionView = {
     type: 'modal',
     callback_id: 'log_decision', // Add this line
