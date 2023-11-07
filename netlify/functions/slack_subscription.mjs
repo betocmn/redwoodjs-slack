@@ -1,22 +1,16 @@
-const { App, ExpressReceiver, FileInstallationStore, LogLevel } = require('@slack/bolt');
-const { Redis } = require("@upstash/redis");
+import { App, ExpressReceiver, LogLevel } from '@slack/bolt';
+import { Redis } from "@upstash/redis";
 
-const {
+import {
   parseRequestBody,
   generateReceiverEvent,
   isUrlVerificationRequest
-} = require("../utils");
+} from "../utils";
 
+export default async (req, context) => {
 
-const redis = Redis.fromEnv();
-
-const receiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  clientId: process.env.SLACK_CLIENT_ID,
-  clientSecret: process.env.SLACK_CLIENT_SECRET,
-  stateSecret: 'arre',
-  scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
-  installationStore: {
+  const redis = Redis.fromEnv();
+  const installationStore = {
     storeInstallation: async (installation) => {
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall && installation.enterprise !== undefined) {
@@ -53,95 +47,93 @@ const receiver = new ExpressReceiver({
       }
       throw new Error('Failed to delete installation');
     },
-  },
-  installerOptions: {
-
   }
-});
+  const receiver = new ExpressReceiver({
+    signingSecret: Netlify.env.get('SLACK_SIGNING_SECRET'),
+    clientId: Netlify.env.get('SLACK_CLIENT_ID'),
+    clientSecret: Netlify.env.get('SLACK_CLIENT_SECRET'),
+    stateSecret: 'arre',
+    scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
+    installationStore
+  })
 
-const app = new App({
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  receiver,
-  logLevel: LogLevel.DEBUG
-});
+  const app = new App({
+    receiver,
+    logLevel: LogLevel.DEBUG
+  });
 
-app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
-  try {
-    // Acknowledge shortcut request
-    await ack();
-
-    // Call the views.open method using one of the built-in WebClients
-    const result = await client.views.open({
-      trigger_id: shortcut.trigger_id,
-      view: {
-        type: 'modal',
-        callback_id: 'log_decision', // Add this line
-        title: {
+  const logDesicionView = {
+    type: 'modal',
+    callback_id: 'log_decision', // Add this line
+    title: {
+      type: 'plain_text',
+      text: 'Log Decision',
+    },
+    blocks: [
+      {
+        type: 'input',
+        block_id: 'title_block',
+        optional: false,
+        label: {
           type: 'plain_text',
-          text: 'Log Decision',
+          text: 'What needs to be decided?',
         },
-        blocks: [
-          {
-            type: 'input',
-            block_id: 'title_block',
-            optional: false,
-            label: {
-              type: 'plain_text',
-              text: 'What needs to be decided?',
-            },
-            element: {
-              type: 'plain_text_input',
-              action_id: 'title_input',
-            },
-          },
-        ],
-        submit: {
-          type: 'plain_text',
-          text: 'Log Decision'
+        element: {
+          type: 'plain_text_input',
+          action_id: 'title_input',
         },
       },
-    })
-
-    logger.info(result);
+    ],
+    submit: {
+      type: 'plain_text',
+      text: 'Log Decision'
+    },
   }
-  catch (error) {
-    logger.error(error);
-  }
-});
 
-app.view('log_decision', async ({ body, ack, say, logger }) => {
-  await ack();
-  logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
-});
+  app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
+    try {
+      // Acknowledge shortcut request
+      await ack();
 
-app.message('hi', async ({ message, say, logger }) => {
-  logger.info('message received: ', message.text)
-  // say() sends a message to the channel where the event was triggered
-  try {
-    await say(`Hey there <@${message.user}>!`);
+      // Call the views.open method using one of the built-in WebClients
+      const result = await client.views.open({
+        trigger_id: shortcut.trigger_id,
+        view: logDesicionView,
+      })
 
-  } catch (error) {
-    logger.error(error)
-  }
-});
-
-module.exports = {
-  handler: async (event, context) => {
-    const payload = parseRequestBody(event.body, event.headers["content-type"]);
-
-    if (isUrlVerificationRequest(payload)) {
-      return {
-        statusCode: 200,
-        body: payload?.challenge
-      };
+      logger.info(result);
     }
+    catch (error) {
+      logger.error(error);
+    }
+  });
 
-    const slackEvent = generateReceiverEvent(payload);
-    await app.processEvent(slackEvent);
+  app.view('log_decision', async ({ body, ack, say, logger }) => {
+    await ack();
+    logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
+  });
 
-    return {
-      statusCode: 200,
-      body: ""
-    };
+  app.message('hi', async ({ message, say, logger }) => {
+    logger.info('message received: ', message.text)
+    // say() sends a message to the channel where the event was triggered
+    try {
+      await say(`Hey there <@${message.user}>!`);
+
+    } catch (error) {
+      logger.error(error)
+    }
+  });
+
+
+  const payload = parseRequestBody(req.body, req.headers["content-type"]);
+
+  if (isUrlVerificationRequest(payload)) {
+    return new Response(payload.challenge);
   }
+
+  const slackEvent = generateReceiverEvent(payload);
+  await app.processEvent(slackEvent);
+
+  return new Response("ok", 200);
+
 };
