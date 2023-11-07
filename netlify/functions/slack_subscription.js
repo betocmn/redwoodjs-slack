@@ -107,9 +107,7 @@ const receiver = new ExpressReceiver({
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateVerification: false,
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
-  installationStore,
-  processBeforeResponse: true,
-
+  installationStore
 })
 
 const app = new App({
