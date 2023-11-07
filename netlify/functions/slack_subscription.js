@@ -153,7 +153,7 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 
 
-const handler = serverless(app.receiver.app);
+const handler = serverless(receiver.app, { provider: 'aws'});
 
 module.exports.handler = async (req, context) => {
   return await handler(req, context);
