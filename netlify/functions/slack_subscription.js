@@ -153,7 +153,7 @@ app.message('hi', async ({ message, say, logger }) => {
   }
 });
 
-er = async (req, context) => {
+module.exports.handler = async (req, context) => {
   return await receiver.requestHandler(req, 'ok')
 }
 // module.exports.handler = async (req, context) => {
