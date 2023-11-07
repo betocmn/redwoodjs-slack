@@ -109,7 +109,8 @@ const receiver = new ExpressReceiver({
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateVerification: false,
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
-  installationStore
+  installationStore,
+  processBeforeResponse: true
 })
 
 const app = new App({
@@ -120,39 +121,38 @@ const app = new App({
 });
 
 
-app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
-  try {
-    // Acknowledge shortcut request
-    await ack();
+// app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
+//   try {
+//     // Acknowledge shortcut request
+//     await ack();
 
-    // Call the views.open method using one of the built-in WebClients
-    const result = await client.views.open({
-      trigger_id: shortcut.trigger_id,
-      view: logDesicionView,
-    })
+//     // Call the views.open method using one of the built-in WebClients
+//     const result = await client.views.open({
+//       trigger_id: shortcut.trigger_id,
+//       view: logDesicionView,
+//     })
 
-    logger.info(result);
-  }
-  catch (error) {
-    logger.error(error);
-  }
-});
+//     logger.info(result);
+//   }
+//   catch (error) {
+//     logger.error(error);
+//   }
+// });
 
-app.view('log_decision', async ({ body, ack, say, logger }) => {
-  await ack();
-  logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
-});
+// app.view('log_decision', async ({ body, ack, say, logger }) => {
+//   await ack();
+//   logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
+// });
 
-app.message('hi', async ({ message, say, logger }) => {
-  logger.info('message received: ', message.text)
-  // say() sends a message to the channel where the event was triggered
-  try {
-    await say(`Hey there <@${message.user}>!`);
+// app.message('hi', async ({ message, say, logger }) => {
+//   logger.info('message received: ', message.text)
+//   // say() sends a message to the channel where the event was triggered
+//   try {
 
-  } catch (error) {
-    logger.error(error)
-  }
-});
+//   } catch (error) {
+//     logger.error(error)
+//   }
+// });
 module.exports.handler = async (req, context) => {
     const payload = parseRequestBody(req.body, req.headers["content-type"]);
 
@@ -168,6 +168,17 @@ module.exports.handler = async (req, context) => {
     body: payload,
     ack: ack.bind()
   }
+
+  app.message('hi', async ({ message, say, logger }) => {
+    logger.info('message received: ', message.text)
+    try {
+      say('¡Hola!')
+
+    } catch (error) {
+      logger.error(error)
+    }
+  });
+  await app.start()
    await app.processEvent(event)
    return new Response("ok");
 
