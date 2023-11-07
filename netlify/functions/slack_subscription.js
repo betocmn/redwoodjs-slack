@@ -193,11 +193,11 @@ module.exports.handler = async (req, context) => {
     processBeforeResponse: false,
     unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
     unhandledRequestTimeoutMillis: 3001,
-    httpRequest: payload,
-    httpResponse: new ServerResponse(payload),
+    httpRequest: req,
+    httpResponse: new ServerResponse(req),
   });
   const event = {
-    body: req,
+    body: req.body,
     ack: ack.bind()
   }
 
