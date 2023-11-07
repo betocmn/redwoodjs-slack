@@ -2,17 +2,15 @@ import fetch from 'node-fetch';
 import { Redis } from '@upstash/redis';
 
 const storeInstallation = async (redis, installation) => {
-  // change the line below so it saves to your database
-  if (installation.enterprise !== undefined) {
-    // support for org wide app installation
+  if (installation.isEnterpriseInstall && installation.enterprise !== undefined) {
     return await redis.set(installation.enterprise.id, installation);
-  } else if (installation.team !== undefined) {
-    // single team app installation
-    return await redis.set(installation.team.id, installation);
-  } else {
-    throw new Error("Error on store instalation")
   }
+  if (installation.team !== undefined) {
+    return await redis.set(installation.team.id, installation);
+  }
+  throw new Error('Failed saving installation data to installationStore');
 }
+
 
 export default async (req, context) => {
   const url = new URL(req.url);
