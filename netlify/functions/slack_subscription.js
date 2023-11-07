@@ -153,4 +153,20 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 
 
-module.exports.handler = serverless(receiver.app);
+const handler = serverless(receiver.app);
+
+module.exports.handler = async (context, req) => {
+  return await handler(context, req);
+}
+// module.exports.handler = async (req, context) => {
+//   const payload = parseRequestBody(req.body, req.headers["content-type"]);
+//   console.log('payload :', payload);
+//   if (isUrlVerificationRequest(payload)) {
+//     return new Response(payload.challenge);
+//   }
+
+//   return new Response("ok");
+
+// };
+
+
