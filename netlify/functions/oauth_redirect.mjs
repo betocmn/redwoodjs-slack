@@ -3,15 +3,15 @@ import { Redis } from '@upstash/redis';
 
 const storeInstallation = async (redis, installation) => {
   // change the line below so it saves to your database
-  if (installation.isEnterpriseInstall && installation.enterprise !== undefined) {
+  if (installation.enterprise !== undefined) {
     // support for org wide app installation
     return await redis.set(installation.enterprise.id, installation);
-  }
-  if (installation.team !== undefined) {
+  } else if (installation.team !== undefined) {
     // single team app installation
     return await redis.set(installation.team.id, installation);
+  } else {
+    throw new Error("Error on store instalation")
   }
-  throw new Error('Failed saving installation data to installationStore');
 }
 
 export default async (req, context) => {
@@ -35,6 +35,7 @@ export default async (req, context) => {
 
   if (response.ok) {
     const data = await response.json();
+    console.log('data: ', data);
     const redis = Redis.fromEnv();
     await storeInstallation(redis, data)
     return Response.json({ message: 'Access token stored succefully.' });
