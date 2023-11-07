@@ -119,28 +119,28 @@ const app = new App({
 });
 
 
-// app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
-//   try {
-//     // Acknowledge shortcut request
-//     await ack();
+app.shortcut('log_decision', async ({ shortcut, ack, client, logger }) => {
+  try {
+    // Acknowledge shortcut request
+    await ack();
 
-//     // Call the views.open method using one of the built-in WebClients
-//     const result = await client.views.open({
-//       trigger_id: shortcut.trigger_id,
-//       view: logDesicionView,
-//     })
+    // Call the views.open method using one of the built-in WebClients
+    const result = await client.views.open({
+      trigger_id: shortcut.trigger_id,
+      view: logDesicionView,
+    })
 
-//     logger.info(result);
-//   }
-//   catch (error) {
-//     logger.error(error);
-//   }
-// });
+    logger.info(result);
+  }
+  catch (error) {
+    logger.error(error);
+  }
+});
 
-// app.view('log_decision', async ({ body, ack, say, logger }) => {
-//   await ack();
-//   logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
-// });
+app.view('log_decision', async ({ body, ack, say, logger }) => {
+  await ack();
+  logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
+});
 
 // app.message('hi', async ({ message, say, logger }) => {
 //   logger.info('message received: ', message.text)
@@ -151,15 +151,15 @@ const app = new App({
 //     logger.error(error)
 //   }
 // });
-app.message('hi', async ({ message, say, logger }) => {
-  logger.info('message received: ', message.text)
-  try {
-    say('¡Hola!')
+// app.message('hi', async ({ message, say, logger }) => {
+//   logger.info('message received: ', message.text)
+//   try {
+//     say('¡Hola!')
 
-  } catch (error) {
-    logger.error(error)
-  }
-});
+//   } catch (error) {
+//     logger.error(error)
+//   }
+// });
 
 module.exports.handler = async (req, context) => {
   let stringBody
