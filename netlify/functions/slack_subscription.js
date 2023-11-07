@@ -58,7 +58,7 @@ const authorizeFn = async ({ teamId, enterpriseId }) => {
   if (teamId) {
     const installation = redis.get(teamId)
     return {
-      botToken: installation.access_token,
+      userToken: installation.access_token,
       botUserId: installation.bot_user_id
     };
   }
