@@ -175,7 +175,7 @@ module.exports.handler = async (req, context) => {
     req.body = parseRequestBody(stringBody, contentType);
   } catch (error) {
     if (error) {
-      logError(logger, 'Parsing request body failed', error);
+      console.log('Parsing request body failed', error);
       return Response('', { status: 401 });
     }
   }
