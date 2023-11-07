@@ -56,7 +56,7 @@ console.log('clientSecret: ',process.env.SLACK_CLIENT_SECRET);
     signingSecret: process.env.SLACK_SIGNING_SECRET,
     clientId: process.env.SLACK_CLIENT_ID,
     clientSecret: process.env.SLACK_CLIENT_SECRET,
-    stateSecret: 'arre',
+    stateVerification: false,
     scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
     installationStore
   })
