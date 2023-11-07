@@ -153,7 +153,6 @@ app.message('hi', async ({ message, say, logger }) => {
     logger.error(error)
   }
 });
-app.start()
 module.exports.handler = async (req, context) => {
     const payload = parseRequestBody(req.body, req.headers["content-type"]);
 
