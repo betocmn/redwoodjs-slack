@@ -160,63 +160,69 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 //     logger.error(error)
 //   }
 // });
-const handler = serverless(receiver.app);
-module.exports.handler = async (event, context) => {
-  // you can do other things here
+// const handler = serverless(receiver.app);
+// module.exports.handler = async (event, context) => {
+//   // you can do other things here
+//   try {
+//     await app.start()
+//   } catch (error) {
+//     console.log('error asd: ', error);
+//   }
+
+//   const result = await handler(event, context);
+//   // and here
+//   return result;
+
+module.exports.handler = async (req, context) => {
+  let stringBody
+  const preparsedRawBody = req.body;
+  if (preparsedRawBody !== undefined) {
+    stringBody = preparsedRawBody.toString();
+  } else {
+    stringBody = (await rawBody(req)).toString();
+  }
+
   try {
     await app.start()
   } catch (error) {
     console.log('error asd: ', error);
   }
+  
+  try {
+    const { 'content-type': contentType } = req.headers;
+    req.body = parseRequestBody(stringBody, contentType);
+  } catch (error) {
+    if (error) {
+      console.log('Parsing request body failed', error);
+      return new Response('', { status: 401 });
+    }
+  }
 
-  const result = await handler(event, context);
-  // and here
-  return result;
-};
-// module.exports.handler = async (req, context) => {
-//   let stringBody
-//   const preparsedRawBody = req.body;
-//   if (preparsedRawBody !== undefined) {
-//     stringBody = preparsedRawBody.toString();
-//   } else {
-//     stringBody = (await rawBody(req)).toString();
-//   }
+  if (req.body && req.body.ssl_check) {
+    return new Response();
+  }
 
-//   try {
-//     const { 'content-type': contentType } = req.headers;
-//     req.body = parseRequestBody(stringBody, contentType);
-//   } catch (error) {
-//     if (error) {
-//       console.log('Parsing request body failed', error);
-//       return new Response('', { status: 401 });
-//     }
-//   }
+  if (req.body && req.body.type && req.body.type === 'url_verification') {
+    return Response.json({ challenge: req.body.challenge });
+  }
 
-//   if (req.body && req.body.ssl_check) {
-//     return new Response();
-//   }
+  const ack = new HTTPResponseAck({
+    logger: new ConsoleLogger(),
+    processBeforeResponse: false,
+    unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
+    unhandledRequestTimeoutMillis: 3001,
+    httpRequest: req,
+    httpResponse: new ServerResponse(req),
+  });
+  const event = {
+    body: req.body,
+    ack: ack.bind()
+  }
 
-//   if (req.body && req.body.type && req.body.type === 'url_verification') {
-//     return Response.json({ challenge: req.body.challenge });
-//   }
+  await app.processEvent(event)
+  return new Response("ok")
 
-//   const ack = new HTTPResponseAck({
-//     logger: new ConsoleLogger(),
-//     processBeforeResponse: false,
-//     unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
-//     unhandledRequestTimeoutMillis: 3001,
-//     httpRequest: req,
-//     httpResponse: new ServerResponse(req),
-//   });
-//   const event = {
-//     body: req.body,
-//     ack: ack.bind()
-//   }
-
-//   await app.processEvent(event)
-//   return new Response("ok")
-
-// }
+}
 // module.exports.handler = async (req, context) => {
 //   const payload = parseRequestBody(req.body, req.headers["content-type"]);
 //   console.log('payload :', payload);
