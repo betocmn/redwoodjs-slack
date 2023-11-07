@@ -1,3 +1,4 @@
+const querystring = require('querystring')
 function parseRequestBody(stringBody, contentType) {
   if (contentType === 'application/x-www-form-urlencoded') {
     // TODO: querystring is deprecated since Node.js v17
