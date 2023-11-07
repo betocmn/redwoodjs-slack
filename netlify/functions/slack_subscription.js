@@ -80,7 +80,8 @@ const receiver = new ExpressReceiver({
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateVerification: false,
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
-  installationStore
+  installationStore,
+  processBeforeResponse: true
 })
 
 const app = new App({
@@ -153,20 +154,20 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 
 
-const handler = serverless(receiver.app, { provider: 'aws'});
+// const handler = serverless(receiver.app, { provider: 'aws'});
 
-module.exports.handler = async (req, context) => {
-  return await handler(req, context);
-}
 // module.exports.handler = async (req, context) => {
-//   const payload = parseRequestBody(req.body, req.headers["content-type"]);
-//   console.log('payload :', payload);
-//   if (isUrlVerificationRequest(payload)) {
-//     return new Response(payload.challenge);
-//   }
+//   return await handler(req, context);
+// }
+module.exports.handler = async (req, context) => {
+  const payload = parseRequestBody(req.body, req.headers["content-type"]);
+  if (isUrlVerificationRequest(payload)) {
+    return new Response(payload.challenge);
+  }
+  const slackEvent = generateReceiverEvent(payload);
+  await app.processEvent(slackEvent);
+  return new Response("ok");
 
-//   return new Response("ok");
-
-// };
+};
 
 
