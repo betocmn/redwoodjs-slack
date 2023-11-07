@@ -17374,7 +17374,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"raw-body@npm:^2.3.3, raw-body@npm:^2.5.1":
+"raw-body@npm:^2.3.3, raw-body@npm:^2.5.1, raw-body@npm:^2.5.2":
   version: 2.5.2
   resolution: "raw-body@npm:2.5.2"
   dependencies:
@@ -18106,6 +18106,7 @@ __metadata:
     "@slack/bolt": ^3.14.0
     "@slack/logger": ^4.0.0
     "@upstash/redis": ^1.24.3
+    raw-body: ^2.5.2
     serverless-http: ^3.2.0
   languageName: unknown
   linkType: soft

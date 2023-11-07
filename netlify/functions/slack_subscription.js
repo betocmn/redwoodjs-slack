@@ -3,7 +3,7 @@ const { ConsoleLogger } = require('@slack/logger')
 const { Redis } = require("@upstash/redis");
 const { ServerResponse } = require('node:http')
 const serverless = require('serverless-http');
-
+const rawBody = require('raw-body')
 const {
   parseRequestBody
 } = require("../utils");
@@ -163,7 +163,7 @@ app.message('hi', async ({ message, say, logger }) => {
 
 module.exports.handler = async (req, context) => {
   let stringBody
-  const preparsedRawBody = req.rawBody;
+  const preparsedRawBody = req.body;
   if (preparsedRawBody !== undefined) {
     stringBody = preparsedRawBody.toString();
   } else {
