@@ -62,7 +62,7 @@ module.exports.handler = async (req, context) => {
       const installation = redis.get(teamId)
       console.log('installation', installation);
       return {
-        userToken: installation.access_token,
+        botToken: installation.access_token,
         botUserId: installation.bot_user_id
       };
     }
@@ -77,6 +77,7 @@ module.exports.handler = async (req, context) => {
     clientSecret: process.env.SLACK_CLIENT_SECRET,
     stateVerification: false,
     scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
+    userScopes: ['chat:write', 'commands', 'channels:read'],
     installationStore,
     processBeforeResponse: true
   })
