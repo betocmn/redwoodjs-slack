@@ -205,7 +205,6 @@ module.exports.handler = async (req, context) => {
     return Response.json({ challenge: req.body.challenge });
   }
   await receiver.requestHandler(req, new ServerResponse(req))
-  return new Response("ok")
 
 }
 // module.exports.handler = async (req, context) => {
