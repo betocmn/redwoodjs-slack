@@ -199,7 +199,7 @@ module.exports.handler = async (req, context) => {
   if (req.body && req.body.type && req.body.type === 'url_verification') {
     return Response.json({ challenge: req.body.challenge });
   }
-  return receiver.requestHandler(req, new ServerResponse(req))
+  return await receiver.requestHandler(req, new ServerResponse(req))
 
 }
 // module.exports.handler = async (req, context) => {
