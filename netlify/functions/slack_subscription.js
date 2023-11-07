@@ -60,8 +60,9 @@ module.exports.handler = async (req, context) => {
     }
     if (teamId) {
       const installation = redis.get(teamId)
+      console.log('installation', installation);
       return {
-        botToken: installation.access_token,
+        userToken: installation.access_token,
         botUserId: installation.bot_user_id
       };
     }
