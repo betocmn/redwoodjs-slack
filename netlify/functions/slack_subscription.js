@@ -157,7 +157,9 @@ module.exports.handler = async (req, context) => {
   if (isUrlVerificationRequest(payload)) {
     return new Response(payload.challenge);
   }
-  await receiver.requestHandler(req, 'ok')
+
+  const slackEvent = generateReceiverEvent(payload);
+  await app.processEvent(slackEvent);
 
   return new Response("ok", 200);
 
