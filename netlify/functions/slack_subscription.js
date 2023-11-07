@@ -62,6 +62,7 @@ console.log('clientSecret: ',process.env.SLACK_CLIENT_SECRET);
   })
 
   const app = new App({
+    signingSecret: process.env.SLACK_SIGNING_SECRET,
     receiver,
     logLevel: LogLevel.DEBUG
   });
