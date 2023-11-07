@@ -1,4 +1,4 @@
 export default async (req, context) => {
-  console.log(req.body);
+  const { city, country } = context.params;
   return new Response('test ok')
 };
