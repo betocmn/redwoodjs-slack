@@ -181,11 +181,11 @@ module.exports.handler = async (req, context) => {
     stringBody = (await rawBody(req)).toString();
   }
 
-  try {
-    await app.start()
-  } catch (error) {
-    console.log('error asd: ', error);
-  }
+  // try {
+  //   await app.start()
+  // } catch (error) {
+  //   console.log('error asd: ', error);
+  // }
 
   try {
     const { 'content-type': contentType } = req.headers;
