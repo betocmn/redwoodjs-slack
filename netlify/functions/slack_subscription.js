@@ -159,9 +159,8 @@ module.exports.handler = async (req, context) => {
     return new Response(payload.challenge);
   }
 
-  const slackEvent = generateReceiverEvent(payload);
-  await app.processEvent(slackEvent);
+  await app.start();
 
-  return new Response("ok", 200);
+  return new Response("ok");
 
 };
