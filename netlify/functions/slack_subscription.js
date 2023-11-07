@@ -155,7 +155,7 @@ app.message('hi', async ({ message, say, logger }) => {
 
 const handler = serverless(receiver.app);
 
-module.exports.handler = async (context, req) => {
+module.exports.handler = async (req, context) => {
   return await handler(context, req);
 }
 // module.exports.handler = async (req, context) => {
