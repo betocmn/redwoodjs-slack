@@ -182,15 +182,6 @@ module.exports.handler = async (req, context) => {
     stringBody = (await rawBody(req)).toString();
   }
 
-  // try {
-  //  await app.stop()
-  // await app.start()
-
-
-  // } catch (error) {
-  //   console.log('error asd: ', error);
-  // }
-
   try {
     const { 'content-type': contentType } = req.headers;
     req.body = parseRequestBody(stringBody, contentType);
@@ -208,7 +199,7 @@ module.exports.handler = async (req, context) => {
   if (req.body && req.body.type && req.body.type === 'url_verification') {
     return Response.json({ challenge: req.body.challenge });
   }
-  await receiver.requestHandler(req, new ServerResponse(req))
+  return receiver.requestHandler(req, new ServerResponse(req))
 
 }
 // module.exports.handler = async (req, context) => {
