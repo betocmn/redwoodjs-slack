@@ -1,8 +1,4 @@
-
-
-module.exports = {
-  handler: async (event, context) => {
-    console.log(event.body);
-    return new Response('test ok');
-  }
+export default async (req, context) => {
+  console.log(req.body);
+  return new Response('test ok')
 };
