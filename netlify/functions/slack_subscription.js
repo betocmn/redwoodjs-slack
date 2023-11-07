@@ -179,9 +179,8 @@ module.exports.handler = async (req, context) => {
   //   ack: ack.bind()
   // }
 
-  await receiver.start()
   //  await app.processEvent(event)
-   return new Response("ok");
+  return await receiver.requestHandler(req, new Response('ok'))
 
 }
 // module.exports.handler = async (req, context) => {
