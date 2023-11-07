@@ -152,10 +152,13 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 //   }
 // });
 
-const handler = serverless(receiver.app);
-module.exports.handler = async (event, context) => {
-  return await handler(event, context);
-}
+module.exports.handler = serverless(receiver.app, {
+  request(req) {
+    console.log('req.body: ', req.body);
+    console.log('req.headers: ', req.headers);
+
+  }
+})
 // module.exports.handler = async (req, context) => {
 //   let stringBody
 //   const preparsedRawBody = req.body;
