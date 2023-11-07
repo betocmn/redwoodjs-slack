@@ -48,6 +48,10 @@ module.exports.handler = async (req, context) => {
       throw new Error('Failed to delete installation');
     },
   }
+
+console.log('signingSecret: ',process.env.SLACK_SIGNING_SECRET);
+console.log('clientId: ',process.env.SLACK_CLIENT_ID);
+console.log('clientSecret: ',process.env.SLACK_CLIENT_SECRET);
   const receiver = new ExpressReceiver({
     signingSecret: process.env.SLACK_SIGNING_SECRET,
     clientId: process.env.SLACK_CLIENT_ID,
