@@ -160,8 +160,7 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 //     logger.error(error)
 //   }
 // });
-const server = await app.start()
-const handler = serverless(server);
+const handler = serverless(receiver.app);
 module.exports.handler = async (event, context) => {
   // you can do other things here
 
