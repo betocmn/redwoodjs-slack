@@ -15,33 +15,35 @@ const storeInstallation = async (redis, installation) => {
 }
 
 export default async (req, context) => {
-  const { code } = context.params;
-  const clientId = Netlify.env.get("SLACK_CLIENT_ID");
-  const clientSecret = Netlify.env.get("SLACK_SIGNING_SECRET");
-  const slackOAuthURL = 'https://slack.com/api/oauth.v2.access';
+  console.log(context.params);
+  return Response.json({ message: 'test ok.' });
 
-  const formData = new URLSearchParams();
-  formData.append('code', code.split('.')[3]);
-  formData.append('client_id', clientId);
-  formData.append('client_secret', clientSecret);
+  // const clientId = Netlify.env.get("SLACK_CLIENT_ID");
+  // const clientSecret = Netlify.env.get("SLACK_SIGNING_SECRET");
+  // const slackOAuthURL = 'https://slack.com/api/oauth.v2.access';
 
-  const response = await fetch(slackOAuthURL, {
-    method: 'POST',
-    body: formData,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  });
+  // const formData = new URLSearchParams();
+  // formData.append('code', code.split('.')[3]);
+  // formData.append('client_id', clientId);
+  // formData.append('client_secret', clientSecret);
 
-  if (response.ok) {
-    const data = await response.json();
-    console.log('data: ', data);
-    const redis = Redis.fromEnv();
-    await storeInstallation(redis, data)
-    return Response.json({ message: 'Access token stored succefully.' });
-  } else {
-    console.error('Error on oauth_redirect', error);
-    return new Response('Error on oauth_redirect', { status: 500 });
-  }
+  // const response = await fetch(slackOAuthURL, {
+  //   method: 'POST',
+  //   body: formData,
+  //   headers: {
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //   },
+  // });
+
+  // if (response.ok) {
+  //   const data = await response.json();
+  //   console.log('data: ', data);
+  //   const redis = Redis.fromEnv();
+  //   await storeInstallation(redis, data)
+  //   return Response.json({ message: 'Access token stored succefully.' });
+  // } else {
+  //   console.error('Error on oauth_redirect', error);
+  //   return new Response('Error on oauth_redirect', { status: 500 });
+  // }
 };
 
