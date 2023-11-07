@@ -160,7 +160,7 @@ module.exports.handler = async (req, context) => {
     unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
     unhandledRequestTimeoutMillis: 3001,
     httpRequest: req,
-    httpResponse: res,
+    httpResponse: 'ok',
   });
   const event = {
     body: req.body,
