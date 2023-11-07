@@ -18,7 +18,6 @@ export default async (req, context) => {
   const url = new URL(req.url);
   const code = url.searchParams.get('code');
   console.log('code: ', code);
-  return Response.json({ message: 'test ok.' });
 
   const clientId = Netlify.env.get("SLACK_CLIENT_ID");
   const clientSecret = Netlify.env.get("SLACK_SIGNING_SECRET");
