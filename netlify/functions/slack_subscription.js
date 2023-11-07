@@ -164,7 +164,7 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 
 module.exports.handler = async (req, context) => {
-  //   const payload = parseRequestBody(req.body, req.headers["content-type"]);
+    const payload = parseRequestBody(req.body, req.headers["content-type"]);
 
   // const ack = new HTTPResponseAck({
   //   logger: new ConsoleLogger(),
@@ -180,7 +180,7 @@ module.exports.handler = async (req, context) => {
   // }
 
   //  await app.processEvent(event)
-  return await receiver.requestHandler(req, new Response('ok'))
+  return await receiver.requestHandler(payload, new Response('ok'))
 
 }
 // module.exports.handler = async (req, context) => {
