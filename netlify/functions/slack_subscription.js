@@ -1,4 +1,5 @@
-const { App, ExpressReceiver, LogLevel } = require('@slack/bolt');
+const { App, ExpressReceiver, LogLevel, HTTPResponseAck, HTTPModuleFunctions, } = require('@slack/bolt');
+const { ConsoleLogger } = require('@slack/logger')
 const { Redis } = require("@upstash/redis");
 const serverless = require('serverless-http');
 
@@ -153,7 +154,21 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 app.start()
 module.exports.handler = async (req, context) => {
-   await receiver.requestHandler(req, 'ok')
+  const ack = new HTTPResponseAck({
+    logger: new ConsoleLogger(),
+    processBeforeResponse: false,
+    unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
+    unhandledRequestTimeoutMillis: 3001,
+    httpRequest: req,
+    httpResponse: res,
+  });
+  const event = {
+    body: req.body,
+    ack: ack.bind()
+  }
+   await app.processEvent(event)
+   return new Response("ok");
+
 }
 // module.exports.handler = async (req, context) => {
 //   const payload = parseRequestBody(req.body, req.headers["content-type"]);
