@@ -5,9 +5,7 @@ const { ServerResponse } = require('node:http')
 const serverless = require('serverless-http');
 
 const {
-  parseRequestBody,
-  generateReceiverEvent,
-  isUrlVerificationRequest
+  parseRequestBody
 } = require("../utils");
 
 const redis = Redis.fromEnv();
@@ -164,23 +162,47 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 
 module.exports.handler = async (req, context) => {
-    const payload = parseRequestBody(req.body, req.headers["content-type"]);
+  let stringBody
+  const preparsedRawBody = req.rawBody;
+  if (preparsedRawBody !== undefined) {
+    stringBody = preparsedRawBody.toString();
+  } else {
+    stringBody = (await rawBody(req)).toString();
+  }
 
-  // const ack = new HTTPResponseAck({
-  //   logger: new ConsoleLogger(),
-  //   processBeforeResponse: false,
-  //   unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
-  //   unhandledRequestTimeoutMillis: 3001,
-  //   httpRequest: payload,
-  //   httpResponse: new ServerResponse(payload),
-  // });
-  // const event = {
-  //   body: payload,
-  //   ack: ack.bind()
-  // }
+  try {
+    const { 'content-type': contentType } = req.headers;
+    req.body = parseRequestBody(stringBody, contentType);
+  } catch (error) {
+    if (error) {
+      logError(logger, 'Parsing request body failed', error);
+      return Response('', { status: 401 });
+    }
+  }
 
-  //  await app.processEvent(event)
-  return await receiver.requestHandler(payload, new Response('ok'))
+  if (req.body && req.body.ssl_check) {
+    return new Response();
+  }
+
+  if (req.body && req.body.type && req.body.type === 'url_verification') {
+    return Response.json({ challenge: req.body.challenge });
+  }
+
+  const ack = new HTTPResponseAck({
+    logger: new ConsoleLogger(),
+    processBeforeResponse: false,
+    unhandledRequestHandler: HTTPModuleFunctions.defaultUnhandledRequestHandler,
+    unhandledRequestTimeoutMillis: 3001,
+    httpRequest: payload,
+    httpResponse: new ServerResponse(payload),
+  });
+  const event = {
+    body: req,
+    ack: ack.bind()
+  }
+
+  await app.processEvent(event)
+  return new Response("ok")
 
 }
 // module.exports.handler = async (req, context) => {
