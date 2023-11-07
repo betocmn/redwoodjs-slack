@@ -50,7 +50,7 @@ module.exports.handler = async (req, context) => {
     },
   }
   const authorizeFn = async ({ teamId, enterpriseId }) => {
-
+    console.log('fron autizeFn', teamId);
     if (enterpriseId) {
       const installation = redis.get(enterpriseId)
       return {
