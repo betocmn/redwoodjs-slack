@@ -154,6 +154,8 @@ app.message('hi', async ({ message, say, logger }) => {
 });
 app.start()
 module.exports.handler = async (req, context) => {
+    const payload = parseRequestBody(req.body, req.headers["content-type"]);
+
   const ack = new HTTPResponseAck({
     logger: new ConsoleLogger(),
     processBeforeResponse: false,
@@ -163,7 +165,7 @@ module.exports.handler = async (req, context) => {
     httpResponse: 'ok',
   });
   const event = {
-    body: req.body,
+    body: payload,
     ack: ack.bind()
   }
    await app.processEvent(event)
