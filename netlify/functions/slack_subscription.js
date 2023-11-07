@@ -178,7 +178,6 @@ module.exports.handler = async (req, context) => {
       logger.error(error)
     }
   });
-  await app.start()
    await app.processEvent(event)
    return new Response("ok");
 
