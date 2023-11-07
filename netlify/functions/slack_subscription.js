@@ -110,7 +110,8 @@ module.exports.handler = async (req, context) => {
     stateVerification: false,
     scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
     installationStore,
-    processBeforeResponse: true
+    processBeforeResponse: true,
+
   })
 
   const app = new App({
@@ -156,7 +157,7 @@ module.exports.handler = async (req, context) => {
   });
 
   await app.start()
-  return new Response('ok')
+  return await app.receiver.requestHandler(req, 'ok')
 }
 // module.exports.handler = async (req, context) => {
 //   const payload = parseRequestBody(req.body, req.headers["content-type"]);
