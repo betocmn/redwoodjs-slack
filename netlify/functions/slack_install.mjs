@@ -7,6 +7,11 @@ module.exports = {
     const redirectUri = process.env.INSTALL_REDIRECT_URI
 
     const scopes = ['chat:write', 'channels:history', 'commands', 'channels:read']
-    return Response.redirect(`https://slack.com/oauth/v2/authorize?scope=${scopes.join(',')}&client_id=${clientId}&redirect_uri=${redirectUri}`);
+    try {
+      return Response.redirect(`https://slack.com/oauth/v2/authorize?scope=${scopes.join(',')}&client_id=${clientId}&redirect_uri=${redirectUri}`, 301);
+
+    } catch (error) {
+      return new Response(error, 500)
+    }
   }
 };
