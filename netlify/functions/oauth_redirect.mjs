@@ -15,35 +15,37 @@ const storeInstallation = async (redis, installation) => {
 }
 
 export default async (req, context) => {
-  console.log(context.params);
+  const url = new URL(req.url);
+  const code = url.searchParams.get('code');
+  console.log('code: ', code);
   return Response.json({ message: 'test ok.' });
 
-  // const clientId = Netlify.env.get("SLACK_CLIENT_ID");
-  // const clientSecret = Netlify.env.get("SLACK_SIGNING_SECRET");
-  // const slackOAuthURL = 'https://slack.com/api/oauth.v2.access';
+  const clientId = Netlify.env.get("SLACK_CLIENT_ID");
+  const clientSecret = Netlify.env.get("SLACK_SIGNING_SECRET");
+  const slackOAuthURL = 'https://slack.com/api/oauth.v2.access';
 
-  // const formData = new URLSearchParams();
-  // formData.append('code', code.split('.')[3]);
-  // formData.append('client_id', clientId);
-  // formData.append('client_secret', clientSecret);
+  const formData = new URLSearchParams();
+  formData.append('code', code.split('.')[3]);
+  formData.append('client_id', clientId);
+  formData.append('client_secret', clientSecret);
 
-  // const response = await fetch(slackOAuthURL, {
-  //   method: 'POST',
-  //   body: formData,
-  //   headers: {
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //   },
-  // });
+  const response = await fetch(slackOAuthURL, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  });
 
-  // if (response.ok) {
-  //   const data = await response.json();
-  //   console.log('data: ', data);
-  //   const redis = Redis.fromEnv();
-  //   await storeInstallation(redis, data)
-  //   return Response.json({ message: 'Access token stored succefully.' });
-  // } else {
-  //   console.error('Error on oauth_redirect', error);
-  //   return new Response('Error on oauth_redirect', { status: 500 });
-  // }
+  if (response.ok) {
+    const data = await response.json();
+    console.log('data: ', data);
+    const redis = Redis.fromEnv();
+    await storeInstallation(redis, data)
+    return Response.json({ message: 'Access token stored succefully.' });
+  } else {
+    console.error('Error on oauth_redirect', error);
+    return new Response('Error on oauth_redirect', { status: 500 });
+  }
 };
 
