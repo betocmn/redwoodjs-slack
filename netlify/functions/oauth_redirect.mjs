@@ -20,11 +20,11 @@ export default async (req, context) => {
   console.log('code: ', code);
 
   const clientId = Netlify.env.get("SLACK_CLIENT_ID");
-  const clientSecret = Netlify.env.get("SLACK_SIGNING_SECRET");
+  const clientSecret = Netlify.env.get("SLACK_CLIENT_SECRET");
   const slackOAuthURL = 'https://slack.com/api/oauth.v2.access';
 
   const formData = new URLSearchParams();
-  formData.append('code', code.split('.')[2]);
+  formData.append('code', code.split);
   formData.append('client_id', clientId);
   formData.append('client_secret', clientSecret);
 
