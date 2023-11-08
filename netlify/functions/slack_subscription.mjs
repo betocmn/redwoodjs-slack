@@ -1,6 +1,6 @@
-const { App, ExpressReceiver, LogLevel } = require('@slack/bolt');
-const { Redis } = require("@upstash/redis");
-const serverless = require('serverless-http');
+import { App, ExpressReceiver, LogLevel } from '@slack/bolt';
+import { Redis } from "@upstash/redis";
+import serverless from 'serverless-http';
 
 const redis = Redis.fromEnv();
 
@@ -144,7 +144,7 @@ app.message('hi', async ({ message, say, logger }) => {
   }
 });
 
-module.exports.handler = serverless(receiver.app)
+export default serverless(receiver.app)
 
 
 
