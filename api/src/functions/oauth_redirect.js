@@ -1,4 +1,11 @@
-import fetch from 'node-fetch';
+import serverlessHttp from 'serverless-http'
+
+import { installExpressReceiver } from 'src/lib/slack'
+
+module.exports.handler = serverlessHttp(installExpressReceiver.app)
+
+
+/*import fetch from 'node-fetch';
 import { Redis } from '@upstash/redis';
 
 const storeInstallation = async (redis, installation) => {
@@ -64,3 +71,4 @@ export const handler = async (event, context) => {
     };
   }
 };
+*/

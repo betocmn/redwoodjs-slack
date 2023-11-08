@@ -9,6 +9,7 @@ const redis = Redis.fromEnv();
 const installationStore = {
   // Check if it's an Enterprise Install or a single Team App Install and save accordingly
   storeInstallation: async (installation) => {
+    console.log('----> storeInstallation: ', installation)
     if (installation.isEnterpriseInstall && installation.enterprise !== undefined) {
       return await redis.set(installation.enterprise.id, installation);
     }
@@ -19,7 +20,7 @@ const installationStore = {
   },
   // Function to fetch installation data
   fetchInstallation: async (installQuery) => {
-
+    console.log('----> fetchInstallation: ', installQuery)
     if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
       return await redis.get(installQuery.enterpriseId);
     }
@@ -80,10 +81,7 @@ export const installExpressReceiver = new ExpressReceiver({
     'commands',
     'channels:read',
   ],
-  redirectUri:
-    'https://spiffy-sunburst-210bfc.netlify.app/.netlify/functions/oauth_redirect',
   installerOptions: {
-    redirectUriPath: '/.netlify/functions/oauth_redirect',
     userScopes: ['email', 'profile', 'openid'],
     legacyStateVerification: true,
   },
