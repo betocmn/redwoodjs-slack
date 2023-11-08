@@ -1,12 +1,6 @@
-const { App, ExpressReceiver, LogLevel, HTTPResponseAck, HTTPModuleFunctions } = require('@slack/bolt');
-const { ConsoleLogger } = require('@slack/logger')
+const { App, ExpressReceiver, LogLevel } = require('@slack/bolt');
 const { Redis } = require("@upstash/redis");
-const { ServerResponse } = require('node:http')
 const serverless = require('serverless-http');
-const rawBody = require('raw-body')
-const {
-  parseRequestBody
-} = require("../utils");
 
 const redis = Redis.fromEnv();
 
@@ -142,46 +136,17 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
   logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
 });
 
-// app.message('hi', async ({ message, say, logger }) => {
-//   logger.info('message received: ', message.text)
-//   // say() sends a message to the channel where the event was triggered
-//   try {
+app.message('hi', async ({ message, say, logger }) => {
+  logger.info('message received: ', message.text)
+  // say() sends a message to the channel where the event was triggered
+  try {
 
-//   } catch (error) {
-//     logger.error(error)
-//   }
-// });
+  } catch (error) {
+    logger.error(error)
+  }
+});
 
 module.exports.handler = serverless(receiver.app)
-// module.exports.handler = async (req, context) => {
-//   let stringBody
-//   const preparsedRawBody = req.body;
-//   if (preparsedRawBody !== undefined) {
-//     stringBody = preparsedRawBody.toString();
-//   } else {
-//     stringBody = (await rawBody(req)).toString();
-//   }
-
-//   try {
-//     const { 'content-type': contentType } = req.headers;
-//     req.body = parseRequestBody(stringBody, contentType);
-//   } catch (error) {
-//     if (error) {
-//       console.log('Parsing request body failed', error);
-//       return new Response('', { status: 401 });
-//     }
-//   }
-
-//   if (req.body && req.body.ssl_check) {
-//     return new Response();
-//   }
-
-//   if (req.body && req.body.type && req.body.type === 'url_verification') {
-//     return Response.json({ challenge: req.body.challenge });
-//   }
-//   return await receiver.requestHandler(req, new ServerResponse(req))
-
-// }
 
 
 
