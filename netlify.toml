@@ -1,3 +1,8 @@
-[[edge_functions]]
-path = "/test"
-function = "hello"
+[functions]
+  external_node_modules = ["express"]
+  node_bundler = "esbuild"
+[[redirects]]
+  force = true
+  from = "/slack/*"
+  status = 200
+  to = "/.netlify/functions/slack_subscription"
