@@ -102,7 +102,11 @@ const receiver = new ExpressReceiver({
   stateVerification: false,
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
   installationStore,
-  processBeforeResponse: true
+  processBeforeResponse: true,
+  redirectUri: 'https://enchanting-douhua-75cdd4.netlify.app/slack/oauth_redirect', // here
+  installerOptions: {
+    redirectUriPath: '/slack/oauth_redirect', // and here!
+  },
 })
 
 const app = new App({
@@ -137,10 +141,8 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 });
 
 app.message('hi', async ({ message, say, logger }) => {
-  logger.info('message received: ', message.text)
-  // say() sends a message to the channel where the event was triggered
   try {
-
+    await say(`Hello, <@${message.user}>`);
   } catch (error) {
     logger.error(error)
   }
