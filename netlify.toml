@@ -1,3 +1,8 @@
+[build]
+  command = "yarn rw deploy netlify"
+  publish = "web/dist"
+  functions = "api/dist/functions"
+
 [functions]
   external_node_modules = ["express"]
   node_bundler = "esbuild"
