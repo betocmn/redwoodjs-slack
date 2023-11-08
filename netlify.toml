@@ -24,3 +24,8 @@
   from = "/slack/*"
   status = 200
   to = "/.netlify/functions/slack_subscription/"
+
+[[redirects]]
+  from = "/*"
+  to = "/200.html"
+  status = 200
