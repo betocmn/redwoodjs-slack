@@ -1,19 +1,16 @@
 [functions]
   external_node_modules = ["express"]
   node_bundler = "esbuild"
-
 [[redirects]]
   force = true
   from = "/slack/install"
   status = 200
   to = "/.netlify/functions/slack_install"
-
 [[redirects]]
   force = true
   from = "/slack/oauth_redirect/*"
   status = 200
   to = netlify/functions/oauth_redirect/"
-
 [[redirects]]
   force = true
   from = "/api/*"
