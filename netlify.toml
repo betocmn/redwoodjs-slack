@@ -5,4 +5,4 @@
   force = true
   from = "/slack/*"
   status = 200
-  to = "/.netlify/functions/slack_subscription"
+  to = "/.netlify/functions/slack_subscription/"
