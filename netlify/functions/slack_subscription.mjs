@@ -137,14 +137,6 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
   logger.info('from view listener', JSON.stringify(body.view.state, null, 2));
 });
 
-app.message('hi', async ({ message, say, logger }) => {
-  try {
-    await say(`Hello, <@${message.user}>`);
-  } catch (error) {
-    logger.error(error)
-  }
-});
-
 // Export a serverless handler for the app
 export const handler = serverless(receiver.app)
 
