@@ -139,8 +139,5 @@ app.view('log_decision', async ({ body, ack, say, logger }) => {
 
 const receiverHandler = serverless(receiver.app)
 
-export const handler = async (event, context) => {
-  const result = await receiverHandler(event, context);
-  return result;
-};
+export const handler = async (event, context) => await receiverHandler(event, context);
 
