@@ -17315,13 +17315,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"querystring@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "querystring@npm:0.2.1"
-  checksum: 6841b32bec4f16ffe7f5b5e4373b47ad451f079cde3a7f45e63e550f0ecfd8f8189ef81fb50079413b3fc1c59b06146e4c98192cb74ed7981aca72090466cd94
-  languageName: node
-  linkType: hard
-
 "querystringify@npm:^2.1.1":
   version: 2.2.0
   resolution: "querystringify@npm:2.2.0"
@@ -17381,7 +17374,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"raw-body@npm:^2.3.3, raw-body@npm:^2.5.1, raw-body@npm:^2.5.2":
+"raw-body@npm:^2.3.3, raw-body@npm:^2.5.1":
   version: 2.5.2
   resolution: "raw-body@npm:2.5.2"
   dependencies:
@@ -18111,10 +18104,7 @@ __metadata:
   dependencies:
     "@redwoodjs/core": 6.3.2
     "@slack/bolt": ^3.14.0
-    "@slack/logger": ^4.0.0
     "@upstash/redis": ^1.24.3
-    querystring: ^0.2.1
-    raw-body: ^2.5.2
     serverless-http: ^3.2.0
   languageName: unknown
   linkType: soft
