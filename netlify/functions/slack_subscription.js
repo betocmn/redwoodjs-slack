@@ -103,10 +103,6 @@ const receiver = new ExpressReceiver({
   scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
   installationStore,
   processBeforeResponse: true,
-  redirectUri: 'https://enchanting-douhua-75cdd4.netlify.app/slack/oauth_redirect', // here
-  installerOptions: {
-    redirectUriPath: '/slack/oauth_redirect', // and here!
-  },
 })
 
 const app = new App({
