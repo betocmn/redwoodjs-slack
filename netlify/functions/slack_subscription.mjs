@@ -144,7 +144,7 @@ app.message('hi', async ({ message, say, logger }) => {
   }
 });
 
-export default serverless(receiver.app)
+export const handler = serverless(receiver.app)
 
 
 
