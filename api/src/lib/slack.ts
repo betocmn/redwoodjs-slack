@@ -59,7 +59,7 @@ const authorizeFn = async ({ teamId, enterpriseId }) => {
   throw new Error('No matching authorizations');
 }
 
-export const installExpressReceiver = new ExpressReceiver({
+export const expressReceiver = new ExpressReceiver({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   processBeforeResponse: true, // required to be true for OAuth
   clientId: process.env.SLACK_CLIENT_ID,
@@ -68,8 +68,10 @@ export const installExpressReceiver = new ExpressReceiver({
   logLevel: LogLevel.DEBUG,
   scopes: [
     'chat:write',
-    'channels:history',
     'commands',
+    'users.profile:read',
+    'users:read',
+    'users:read.email',
     'channels:read',
   ],
   installerOptions: {

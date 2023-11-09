@@ -1,24 +1,14 @@
-import { App, ExpressReceiver, LogLevel } from '@slack/bolt';
+import { App, LogLevel } from '@slack/bolt';
 import serverless from 'serverless-http';
-import { installationStore, authorizeFn, installExpressReceiver } from 'src/lib/slack';
+import { expressReceiver } from 'src/lib/slack';
 
 
 // Initialize the Slack Bolt ExpressReceiver
-const receiver = installExpressReceiver
-/*const receiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  clientId: process.env.SLACK_CLIENT_ID,
-  clientSecret: process.env.SLACK_CLIENT_SECRET,
-  stateVerification: false,
-  scopes: ['chat:write', 'channels:history', 'commands', 'channels:read'],
-  installationStore,
-  processBeforeResponse: true,
-})*/
+const receiver = expressReceiver
 
 // Create a Slack Bolt app
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
-  //authorize: authorizeFn,
   receiver,
   logLevel: LogLevel.DEBUG
 });

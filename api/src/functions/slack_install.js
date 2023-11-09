@@ -1,22 +1,17 @@
 import serverlessHttp from 'serverless-http'
 
-import { installExpressReceiver } from 'src/lib/slack'
+import { expressReceiver } from 'src/lib/slack'
 
 export const handler = serverlessHttp(async (req, res) => {
   try {
-    const url = await installExpressReceiver.installer.generateInstallUrl({
+    const url = await expressReceiver.installer.generateInstallUrl({
       scopes: [
-        'chat:write',
-        'channels:history',
-        'commands',
-        'channels:read',
-        /*
         'chat:write',
         'commands',
         'users.profile:read',
         'users:read',
         'users:read.email',
-        */
+        'channels:read',
       ],
       userScopes: ['email', 'profile', 'openid'],
     })
