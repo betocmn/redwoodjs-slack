@@ -43,29 +43,20 @@ const installationStore = {
 
 // Define an authorization function
 const authorizeFn = async ({ teamId, enterpriseId }) => {
-  if (enterpriseId) {
-    const installation = await redis.get(enterpriseId)
+  console.log('----> authorizeFn: ', teamId, enterpriseId)
+  const key = enterpriseId || teamId
+  if (key){
+    const installation = await redis.get(key)
+    console.log('----> authorizeFn return : ', installation)
     return {
-      botToken: installation.access_token,
-      botUserId: installation.bot_user_id,
-      userId: installation.authed_user.id,
+      botToken: installation.bot.token,
+      botUserId: installation.bot.userId,
+      userId: installation.user.id,
       teamId: installation.team?.id,
       enterpriseId: installation.enterprise?.id,
-    };
-  }
-  if (teamId) {
-    const installation = await redis.get(teamId)
-    return {
-      botToken: installation.access_token,
-      botUserId: installation.bot_user_id,
-      userId: installation.authed_user.id,
-      teamId: installation.team?.id,
-      enterpriseId: installation.enterprise?.id,
-    };
+    }
   }
   throw new Error('No matching authorizations');
-
-
 }
 
 export const installExpressReceiver = new ExpressReceiver({
@@ -82,7 +73,6 @@ export const installExpressReceiver = new ExpressReceiver({
     'channels:read',
   ],
   installerOptions: {
-    userScopes: ['email', 'profile', 'openid'],
     legacyStateVerification: true,
   },
   installationStore: installationStore,
